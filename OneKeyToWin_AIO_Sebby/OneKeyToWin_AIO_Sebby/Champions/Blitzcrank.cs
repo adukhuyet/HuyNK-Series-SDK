@@ -33,30 +33,30 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Q.SetSkillshot(0.25f, 100f, 1900f, true, SkillshotType.SkillshotLine);
 
-            Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("autoW", "Auto W", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("autoE", "Auto E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("autoW", "Tự động W", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("autoE", "Tự động E", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("showgrab", "Show statistics", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("ts", "Use common TargetSelector", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("ts1", "ON - only one target"));
-            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("ts2", "OFF - all grab-able targets"));
+            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("ts", "Sử dụng chọn mục tiêu mặc định", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("ts1", "Bật - Chỉ 1 kẻ thù"));
+            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("ts2", "Tắt - tất cả mục tiêu có thể bị kéo"));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("qCC", "Auto Q cc & dash enemy", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("minGrab", "Min range grab", true).SetValue(new Slider(250, 125, (int)Q.Range)));
-            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("maxGrab", "Max range grab", true).SetValue(new Slider((int)Q.Range, 125, (int)Q.Range)));
+            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("qCC", "Tự dùng Q cc & kẻ thù đang va chạm", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("minGrab", "Tầm kéo tối thiểu", true).SetValue(new Slider(250, 125, (int)Q.Range)));
+            Config.SubMenu(Player.ChampionName).SubMenu("Q option").AddItem(new MenuItem("maxGrab", "Tầm kéo tối đa", true).SetValue(new Slider((int)Q.Range, 125, (int)Q.Range)));
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.Team != Player.Team))
                 Config.SubMenu(Player.ChampionName).SubMenu("Q option").SubMenu("Grab").AddItem(new MenuItem("grab" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("rCount", "Auto R if enemies in range", true).SetValue(new Slider(3, 0, 5)));
-            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("afterGrab", "Auto R after grab", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("afterAA", "Auto R befor AA", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("rKs", "R ks", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("inter", "OnPossibleToInterrupt")).SetValue(true);
+            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("rCount", "Tự động R nếu kẻ thù trong tầm", true).SetValue(new Slider(3, 0, 5)));
+            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("afterGrab", "Tự dùng R sau khi kéo", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("afterAA", "Tự dùng R trước khi đánh thường", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("rKs", "R để KS", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("inter", "Ngắt chiêu")).SetValue(true);
             Config.SubMenu(Player.ChampionName).SubMenu("R option").AddItem(new MenuItem("Gap", "OnEnemyGapcloser")).SetValue(true);
 
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("qRange", "Q range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("rRange", "R range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Draw when skill rdy", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("qRange", "Tầm Q", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("rRange", "Tầm R R", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Vẽ khi chiêu đã sẵn sàng", true).SetValue(true));
 
             Game.OnUpdate += Game_OnGameUpdate;
             Orbwalking.BeforeAttack += BeforeAttack;
