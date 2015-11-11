@@ -58,13 +58,13 @@ namespace OneKeyToWin_AIO_Sebby
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.Team != Player.Team))
                 Config.SubMenu(Player.ChampionName).SubMenu("GapCloser").SubMenu("Use on").AddItem(new MenuItem("gap" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("autoR", "Auto R", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("visibleR", "Unvisable block AA ", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("autoQR", "Auto Q when R active ", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("autoR", "Tự động R", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("visibleR", "Khi tàn hình khóa di chuyển ", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("autoQR", "Tự đông Q khi R kích hoạt ", true).SetValue(true));
 
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.Team != Player.Team))
                 Config.SubMenu(Player.ChampionName).SubMenu("E config").SubMenu("Use E ").AddItem(new MenuItem("stun" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("E config").AddItem(new MenuItem("useE", "OneKeyToCast E closest person", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
+            Config.SubMenu(Player.ChampionName).SubMenu("E config").AddItem(new MenuItem("useE", "Dùng E lên người gần nhất", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
 
             Config.SubMenu(Player.ChampionName).SubMenu("E config").AddItem(new MenuItem("Eks", "E KS", true).SetValue(true));
         }
