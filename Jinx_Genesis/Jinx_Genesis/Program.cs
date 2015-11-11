@@ -74,47 +74,47 @@ namespace Jinx_Genesis
        
         private static void LoadMenu()
         {
-            Config = new Menu(ChampionName + " GENESIS", ChampionName + " GENESIS", true);
+            Config = new Menu(ChampionName + " ProJinx", ChampionName + " ProJinx", true);
             var targetSelectorMenu = new Menu("Target Selector", "Target Selector");
             TargetSelector.AddToMenu(targetSelectorMenu);
             Config.AddSubMenu(targetSelectorMenu);
-            Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
+            Config.AddSubMenu(new Menu("Chiến", "Orbwalking"));
             Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
             Config.AddToMainMenu();
 
-            Config.SubMenu("Draw").AddItem(new MenuItem("qRange", "Q range").SetValue(false));
-            Config.SubMenu("Draw").AddItem(new MenuItem("wRange", "W range").SetValue(false));
-            Config.SubMenu("Draw").AddItem(new MenuItem("eRange", "E range").SetValue(false));
-            Config.SubMenu("Draw").AddItem(new MenuItem("rRange", "R range").SetValue(false));
+            Config.SubMenu("Draw").AddItem(new MenuItem("qRange", "Tầm đánh Q").SetValue(false));
+            Config.SubMenu("Draw").AddItem(new MenuItem("wRange", "Tầm đánh W").SetValue(false));
+            Config.SubMenu("Draw").AddItem(new MenuItem("eRange", "Tầm đánh E").SetValue(false));
+            Config.SubMenu("Draw").AddItem(new MenuItem("rRange", "Tầm đánh R").SetValue(false));
             Config.SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Draw only ready spells").SetValue(true));
 
-            Config.SubMenu("Q Config").AddItem(new MenuItem("Qcombo", "Combo Q").SetValue(true));
-            Config.SubMenu("Q Config").AddItem(new MenuItem("Qharass", "Harass Q").SetValue(true));
-            Config.SubMenu("Q Config").AddItem(new MenuItem("farmQout", "Farm Q out range AA minion").SetValue(true));
-            Config.SubMenu("Q Config").AddItem(new MenuItem("Qlaneclear", "Lane clear x minions").SetValue(new Slider(4, 10, 2)));
-            Config.SubMenu("Q Config").AddItem(new MenuItem("Qchange", "Q change mode FishBone -> MiniGun").SetValue(new StringList(new[] { "Real Time", "Before AA"}, 1)));
-            Config.SubMenu("Q Config").AddItem(new MenuItem("Qaoe", "Force FishBone if can hit x target").SetValue(new Slider(3, 5, 0)));
-            Config.SubMenu("Q Config").AddItem(new MenuItem("QmanaIgnore", "Ignore mana if can kill in x AA").SetValue(new Slider(4, 10, 0)));
+            Config.SubMenu("Q Config").AddItem(new MenuItem("Qcombo", "Đánh nhau bằng  Q").SetValue(true));
+            Config.SubMenu("Q Config").AddItem(new MenuItem("Qharass", "Cấu rỉa Q").SetValue(true));
+            Config.SubMenu("Q Config").AddItem(new MenuItem("farmQout", "Đổi súng nếu ngoài tầm").SetValue(true));
+            Config.SubMenu("Q Config").AddItem(new MenuItem("Qlaneclear", "Q khi  số lượng  lính (X) = ").SetValue(new Slider(4, 10, 2)));
+            Config.SubMenu("Q Config").AddItem(new MenuItem("Qchange", "Q Đổi súng lớn thành súng nhỏ").SetValue(new StringList(new[] { "Thời gian thực", "Trước khi AA"}, 1)));
+            Config.SubMenu("Q Config").AddItem(new MenuItem("Qaoe", "Luôn Q khi trúng (X) mục tiêu = ").SetValue(new Slider(3, 5, 0)));
+            Config.SubMenu("Q Config").AddItem(new MenuItem("QmanaIgnore", "Lượng mana cho phép trong (x) AA").SetValue(new Slider(4, 10, 0)));
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsEnemy))
-                Config.SubMenu("Q Config").SubMenu("Harass Q enemy:").AddItem(new MenuItem("harasQ" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
+                Config.SubMenu("Q Config").SubMenu("Cấu rỉa bằng Q :").AddItem(new MenuItem("harasQ" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
              
-            Config.SubMenu("W Config").AddItem(new MenuItem("Wcombo", "Combo W").SetValue(true));
-            Config.SubMenu("W Config").AddItem(new MenuItem("Wharass", "W harass").SetValue(true));
+            Config.SubMenu("W Config").AddItem(new MenuItem("Wcombo", "Dùng W trong combo").SetValue(true));
+            Config.SubMenu("W Config").AddItem(new MenuItem("Wharass", " Dùng W cấu rỉa").SetValue(true));
             Config.SubMenu("W Config").AddItem(new MenuItem("Wks", "W KS").SetValue(true));
-            Config.SubMenu("W Config").AddItem(new MenuItem("Wts", "Harass mode").SetValue(new StringList(new[] { "Target selector", "All in range" }, 0)));
-            Config.SubMenu("W Config").AddItem(new MenuItem("Wmode", "W mode").SetValue(new StringList(new[] { "Out range MiniGun", "Out range FishBone", "Custome range" }, 0)));
-            Config.SubMenu("W Config").AddItem(new MenuItem("Wcustome", "Custome minimum range").SetValue(new Slider(600, 1500, 0)));
+            Config.SubMenu("W Config").AddItem(new MenuItem("Wts", "Chế độ cấu rỉa").SetValue(new StringList(new[] { "Lựa đối tượng", "Tất cả trong tầm đánh" }, 0)));
+            Config.SubMenu("W Config").AddItem(new MenuItem("Wmode", "Chế độ W").SetValue(new StringList(new[] { "Ngoài tầm súng nhỏ", "Ngoài tầm giật bắn", "Tùy chỉnh tầm đánh" }, 0)));
+            Config.SubMenu("W Config").AddItem(new MenuItem("Wcustome", "Tùy chỉnh tầm đánh nhỏ nhất").SetValue(new Slider(600, 1500, 0)));
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsEnemy))
-                Config.SubMenu("W Config").SubMenu("Harass W enemy:").AddItem(new MenuItem("haras" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
+                Config.SubMenu("W Config").SubMenu("Dùng W cấu rỉa :").AddItem(new MenuItem("haras" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
 
-            Config.SubMenu("E Config").AddItem(new MenuItem("Ecombo", "Combo E").SetValue(true));
-            Config.SubMenu("E Config").AddItem(new MenuItem("Etel", "E on enemy teleport").SetValue(true));
-            Config.SubMenu("E Config").AddItem(new MenuItem("Ecc", "E on CC").SetValue(true));
-            Config.SubMenu("E Config").AddItem(new MenuItem("Eslow", "E on slow").SetValue(true));
-            Config.SubMenu("E Config").AddItem(new MenuItem("Edash", "E on dash").SetValue(true));
-            Config.SubMenu("E Config").AddItem(new MenuItem("Espell", "E on special spell detection").SetValue(true));
-            Config.SubMenu("E Config").AddItem(new MenuItem("Eaoe", "E if can catch x enemies").SetValue(new Slider(3, 5, 0)));
-            Config.SubMenu("E Config").SubMenu("E Gap Closer").AddItem(new MenuItem("EmodeGC", "Gap Closer position mode").SetValue(new StringList(new[] { "Dash end position", "Jinx position"}, 0)));
+            Config.SubMenu("E Config").AddItem(new MenuItem("Ecombo", "Dùng E Combo").SetValue(true));
+            Config.SubMenu("E Config").AddItem(new MenuItem("Etel", "Dùng E khi đối phương dịch chuyển").SetValue(true));
+            Config.SubMenu("E Config").AddItem(new MenuItem("Ecc", "Dùng E khi CC").SetValue(true));
+            Config.SubMenu("E Config").AddItem(new MenuItem("Eslow", "E khi bị làm chậm").SetValue(true));
+            Config.SubMenu("E Config").AddItem(new MenuItem("Edash", "E Khi hất tung").SetValue(true));
+            Config.SubMenu("E Config").AddItem(new MenuItem("Espell", "E khi trúng chiu").SetValue(true));
+            Config.SubMenu("E Config").AddItem(new MenuItem("Eaoe", "E nếu trúng mục tiêu (X) = ").SetValue(new Slider(3, 5, 0)));
+            Config.SubMenu("E Config").SubMenu("E Gap Closer").AddItem(new MenuItem("EmodeGC", "E ngay bị trí bị tấn công").SetValue(new StringList(new[] { "Dash end position", "Jinx position"}, 0)));
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsEnemy))
                 Config.SubMenu("E Config").SubMenu("E Gap Closer").SubMenu("Cast on enemy:").AddItem(new MenuItem("EGCchampion" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
 
