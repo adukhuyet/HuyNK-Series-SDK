@@ -331,31 +331,31 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void LoadMenuOKTW()
         {
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Draw only ready spells", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("QRange", "Q range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("ERange", "E range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("RRange", "R range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("noti", "Show notification & line", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("onlyRdy", "Chỉ hiển thị chiêu đã hồi", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("QRange", "Tầm đánh Q", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("ERange", "Tầm đánh E", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("RRange", "Tầm đánh R", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("noti", "Hiển thị thông báo và đường kẻ", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("Q Config").AddItem(new MenuItem("autoQ", "Auto Q", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Q Config").AddItem(new MenuItem("harasQ", "Use Q on minion", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Q Config").AddItem(new MenuItem("killQ", "Use Q only if can kill minion", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt Q").AddItem(new MenuItem("autoQ", "Tự dùng Q", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt Q").AddItem(new MenuItem("harasQ", "Dùng Q trên lính", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt Q").AddItem(new MenuItem("killQ", "Dùng Q chỉ khi giết đc lính", true).SetValue(false));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoW", "Auto W", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("harasW", "Haras W", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").AddItem(new MenuItem("autoW", "Tự dùng W", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").AddItem(new MenuItem("harasW", "Cấu rỉa W", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("AGC", "AntiGapcloserE", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt E").AddItem(new MenuItem("AGC", "Làm chậm địch bằng E", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoR", "Auto R", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("forceBlockMove", "Force block player", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("useR", "Semi-manual cast R key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt R").AddItem(new MenuItem("autoR", "Tự dùng R", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt R").AddItem(new MenuItem("forceBlockMove", "Khóa di chuyển khi R", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt R").AddItem(new MenuItem("useR", "Phím dùng R ", true).SetValue(new KeyBind("R".ToCharArray()[0], KeyBindType.Press))); //32 == space
 
-            Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("autoE", "Auto E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("autoE", "Tự E", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleE", "Jungle clear E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleE", "Dọn rừng bằng E", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleQ", "Jungle Q ks", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleW", "Jungle clear W", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleQ", "Dọn rừng Q", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleW", "Dọn rừng W", true).SetValue(true));
         }
 
         public static void drawLine(Vector3 pos1, Vector3 pos2, int bold, System.Drawing.Color color)
