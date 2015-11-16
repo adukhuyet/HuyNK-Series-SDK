@@ -54,32 +54,32 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void LoadMenuOKTW()
         {
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("noti", "Show notification & line", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("qRange", "Q range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("wRange", "W range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("eRange", "E range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("rRange", "R range", true).SetValue(false));
-            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Draw only ready spells", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("noti", "Hiển thị thông báo và đường kẻ", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("qRange", "Tầm đánh Q", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("wRange", "Tầm đánh W", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("eRange", "Tầm đánh E", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("rRange", "Tầm đánh R", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Hiển Thị").AddItem(new MenuItem("onlyRdy", "Chỉ hiện những skill đã hồi", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("Q Config").AddItem(new MenuItem("autoQ", "Reduce Q use", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt Q").AddItem(new MenuItem("autoQ", "Tự dùng Q", true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoW", "Auto W on hard CC", true).SetValue(true));  
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("telE", "Auto W teleport", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("bushW", "Auto W bush", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("Wspell", "W on special spell detection", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").SubMenu("W Gap Closer").AddItem(new MenuItem("WmodeGC", "Gap Closer position mode", true).SetValue(new StringList(new[] { "Dash end position",  "My hero position" }, 0)));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").AddItem(new MenuItem("autoW", "Tự W khi CC", true).SetValue(true));  
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").AddItem(new MenuItem("telE", "Dùng W ngay vị trí địch dịch chuyển", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").AddItem(new MenuItem("bushW", "Tựu thả W", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").AddItem(new MenuItem("Wspell", "W khi trúng 1 số chiêu đặc biệt", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").SubMenu("W Gap Closer").AddItem(new MenuItem("WmodeGC", "Vị trí dùng W", true).SetValue(new StringList(new[] { "Vị trí của địch dùng chiêu",  "Ngay tại chân catlyn" }, 0)));
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsEnemy))
-                Config.SubMenu(Player.ChampionName).SubMenu("W Config").SubMenu("W Gap Closer").SubMenu("Cast on enemy:").AddItem(new MenuItem("WGCchampion" + enemy.ChampionName, enemy.ChampionName, true).SetValue(true));
+                Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt W").SubMenu("W Khi gặp chiêu nguy hiểm").SubMenu("Vị trí W:").AddItem(new MenuItem("WGCchampion" + enemy.ChampionName, enemy.ChampionName, true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("autoE", "Auto E", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("harrasEQ", "Harass E + Q", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("useE", "Dash E HotKeySmartcast", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
-            Config.SubMenu(Player.ChampionName).SubMenu("E Config").SubMenu("E Gap Closer").AddItem(new MenuItem("EmodeGC", "Gap Closer position mode", true).SetValue(new StringList(new[] { "Dash end position", "Cursor position", "Enemy position" }, 2)));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt E").AddItem(new MenuItem("autoE", "Tự dùng E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt E").AddItem(new MenuItem("harrasEQ", "Cấu rỉa E + Q", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt E").AddItem(new MenuItem("useE", "E đến vị trí con trỏ", true).SetValue(new KeyBind("G".ToCharArray()[0], KeyBindType.Press)));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt E").SubMenu("E Khi gặp chiêu nguy hiểm").AddItem(new MenuItem("EmodeGC", "Chế độ dùng E", true).SetValue(new StringList(new[] { "E tại chỗ địch dùng chiêu", "Vi trí chuột", "Ngay vị trí catlyn" }, 2)));
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsEnemy))
-                Config.SubMenu(Player.ChampionName).SubMenu("E Config").SubMenu("E Gap Closer").SubMenu("Cast on enemy:").AddItem(new MenuItem("EGCchampion" + enemy.ChampionName, enemy.ChampionName,true).SetValue(true));
+                Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt E").SubMenu("E Gap Closer").SubMenu("Cast on enemy:").AddItem(new MenuItem("EGCchampion" + enemy.ChampionName, enemy.ChampionName,true).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoR", "Auto R KS", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("useR", "Semi-manual cast R key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt R").AddItem(new MenuItem("autoR", "Tự dùng R để KS", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Cài đặt R").AddItem(new MenuItem("useR", "Dùng R khi bấm", true).SetValue(new KeyBind("R".ToCharArray()[0], KeyBindType.Press)));
 
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQ", "Lane clear Q", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("Mana", "LaneClear Mana", true).SetValue(new Slider(80, 100, 30)));
