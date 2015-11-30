@@ -34,16 +34,6 @@ namespace LeagueSharp.Common
 {
     public class TargetSelector
     {
-        #region Main
-
-        static TargetSelector()
-        {
-            Game.OnWndProc += GameOnOnWndProc;
-            Drawing.OnDraw += DrawingOnOnDraw;
-        }
-
-        #endregion
-
         #region Enum
 
         public enum DamageType
@@ -108,6 +98,13 @@ namespace LeagueSharp.Common
                     _selectedTargetObjAiHero.Position, 150, _configMenu.Item("SelTColor").GetValue<Circle>().Color, 7,
                     true);
             }
+
+            var a =  (_configMenu.Item("ForceFocusSelectedK").GetValue<KeyBind>().Active ||
+                      _configMenu.Item("ForceFocusSelectedK2").GetValue<KeyBind>().Active) && 
+                      _configMenu.Item("ForceFocusSelectedKeys").GetValue<bool>();
+
+            _configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
+            _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());
         }
 
         private static void GameOnOnWndProc(WndEventArgs args)
@@ -183,7 +180,7 @@ namespace LeagueSharp.Common
                 "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar",
                 "Hecarim", "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu",
                 "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona",
-                "Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
+                "Soraka", "Taric", "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
             };
 
             string[] p2 =
@@ -203,10 +200,10 @@ namespace LeagueSharp.Common
             string[] p4 =
             {
                 "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
-                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Leblanc",
-                "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
-                "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath",
-                "Zed", "Ziggs"
+                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Kindred",
+                "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
+                "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "Velkoz", "Viktor",
+                "Xerath", "Zed", "Ziggs"
             };
 
             if (p1.Contains(championName))
@@ -229,19 +226,31 @@ namespace LeagueSharp.Common
         {
             CustomEvents.Game.OnGameLoad += args =>
             {
-                Menu config = new Menu("Chọn đối tượng", "TargetSelector");
+                Menu config = new Menu("Target Selector", "TargetSelector");
 
                 _configMenu = config;
 
-                config.AddItem(new MenuItem("FocusSelected", "Tập trung vào mục tiêu chọn trước").SetShared().SetValue(true));
-                config.AddItem(
-                    new MenuItem("ForceFocusSelected", "Chỉ đánh mục tiêu đã chọn trước").SetShared().SetValue(false))
-                    .Permashow();
-                config.AddItem(
-                    new MenuItem("SelTColor", "Màu sắc của mục tiêu").SetShared().SetValue(new Circle(true, Color.Red)));
-                config.AddItem(new MenuItem("Sep", "").SetShared());
+                Menu focusMenu = new Menu("Focus Target Settings", "FocusTargetSettings");
+
+                focusMenu.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+                focusMenu.AddItem(
+                    new MenuItem("SelTColor", "Focus selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false));
+                focusMenu.AddItem(new MenuItem("sep", ""));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelectedKeys", "Enable only attack selected Keys").SetShared().SetValue(false));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelectedK", "Only attack selected Key"))
+                    .SetValue(new KeyBind(32, KeyBindType.Press));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelectedK2", "Only attack selected Key 2"))
+                    .SetValue(new KeyBind(32, KeyBindType.Press));
+
+                config.AddSubMenu(focusMenu);
+
                 var autoPriorityItem =
-                    new MenuItem("AutoPriority", "Tự động sắp xếp ưu tiên").SetShared().SetValue(false);
+                    new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false).SetTooltip("5 = Highest Priority");
                 autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
 
                 foreach (var enemy in HeroManager.Enemies)
@@ -265,6 +274,9 @@ namespace LeagueSharp.Common
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
 
                 CommonMenu.Config.AddSubMenu(config);
+
+                Game.OnWndProc += GameOnOnWndProc;
+                Drawing.OnDraw += DrawingOnOnDraw;
             };
         }
 
@@ -423,6 +435,17 @@ namespace LeagueSharp.Common
                     return SelectedTarget;
                 }
 
+                if (_configMenu != null && IsValidTarget(
+                    SelectedTarget, _configMenu.Item("ForceFocusSelectedKeys").GetValue<bool>() ? float.MaxValue : range,
+                    type, ignoreShieldSpells, rangeCheckFrom))
+                {
+                    if (_configMenu.Item("ForceFocusSelectedK").GetValue<KeyBind>().Active ||
+                        _configMenu.Item("ForceFocusSelectedK2").GetValue<KeyBind>().Active)
+                    {
+                        return SelectedTarget;
+                    }
+                }
+
                 if (_configMenu != null && _configMenu.Item("TargetingMode") != null &&
                     Mode == TargetingMode.AutoPriority)
                 {
@@ -456,7 +479,7 @@ namespace LeagueSharp.Common
                                         hero.ServerPosition, true));
 
                     case TargetingMode.NearMouse:
-                        return targets.Find(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
+                        return targets.MinOrDefault(hero => hero.Distance(Game.CursorPos, true));
 
                     case TargetingMode.AutoPriority:
                         return
