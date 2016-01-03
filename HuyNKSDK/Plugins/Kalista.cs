@@ -16,6 +16,7 @@ using Collision = LeagueSharp.SDK.Core.Math.Collision;
 using Color = System.Drawing.Color;
 
 using SharpDX;
+using LeagueSharp.SDK.Core.Wrappers.Spells;
 
 namespace HuyNK_Series_SDK.Plugins
 {
@@ -119,15 +120,15 @@ namespace HuyNK_Series_SDK.Plugins
         {
             if (!ObjectManager.Player.IsDead)
             {
-                switch (Orbwalker.ActiveMode)
+                switch (Variables.Orbwalker.GetActiveMode())
                 {
-                    case OrbwalkerMode.Orbwalk:
+                    case OrbwalkingMode.Combo:
                         Combo();
                         break;
-                    case OrbwalkerMode.Hybrid:
+                    case OrbwalkingMode.Hybrid:
                         Harass();
                         break;
-                    case OrbwalkerMode.LaneClear:
+                    case OrbwalkingMode.LaneClear:
                         LaneClear();
                         JungleClear();
                         break;

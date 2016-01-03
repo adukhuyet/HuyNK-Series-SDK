@@ -19,8 +19,8 @@ using SharpDX;
 using HitChance = LeagueSharp.SDK.Core.Enumerations.HitChance;
 using KeyBindType = LeagueSharp.SDK.Core.Enumerations.KeyBindType;
 using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
-using SkillshotType = LeagueSharp.SDK.Core.Enumerations.SkillshotType;
-using Spell = LeagueSharp.SDK.Core.Wrappers.Spell;
+using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
+
 
 namespace HuyNK_Series_SDK.Plugins
 {
@@ -36,16 +36,16 @@ namespace HuyNK_Series_SDK.Plugins
          
 
             W = new Spell(SpellSlot.W, 1500f);
-            W.SetSkillshot(0.6f, 60f, 3300f, true, SkillshotType.SkillshotLine);
+            W.SetSkillshot(0.6f, 60f, 3300f, true, LeagueSharp.Common.SkillshotType.SkillshotLine);
 
             E = new Spell(SpellSlot.E, 900f);
-            E.SetSkillshot(0.7f, 120f, 1750f, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.7f, 120f, 1750f, false, LeagueSharp.Common.SkillshotType.SkillshotCircle);
 
             R = new Spell(SpellSlot.R, 20000);
-            R.SetSkillshot(0.6f, 140f, 1700f, false, SkillshotType.SkillshotLine);
+            R.SetSkillshot(0.6f, 140f, 1700f, false, LeagueSharp.Common.SkillshotType.SkillshotLine);
 
             _r2 = new Spell(SpellSlot.R, 20000);
-            _r2.SetSkillshot(0.6f, 140f, 1700f, false, SkillshotType.SkillshotLine);
+            _r2.SetSkillshot(0.6f, 140f, 1700f, false, LeagueSharp.Common.SkillshotType.SkillshotLine);
             //Menu
        
             
@@ -58,7 +58,7 @@ namespace HuyNK_Series_SDK.Plugins
             Skill.Add(new MenuSlider("W_Max_Range", "W khi đủ tầm", 900, 500, 1500));
             Skill.Add(new MenuSlider("R_Min_Range", "Tầm đánh R nhỏ nhât", 300, 300, 1200));
             Skill.Add(new MenuSlider("R_Max_Range", "Tầm đánh R lớn nhất", 20000, 500, 20000));
-            Skill.Add(new MenuKeyBind("Combo_WE", "Combo WE", Keys.E, KeyBindType.Press, "E"));
+            Skill.Add(new MenuKeyBind("Combo_WE", "Combo WE", System.Windows.Forms.Keys.E, KeyBindType.Press, "E"));
             
             // Combo
             Menu ComboMenu = new Menu("Combo", "Combo");
@@ -166,18 +166,18 @@ namespace HuyNK_Series_SDK.Plugins
            
              
                 Killsteal();
-                switch (Orbwalker.ActiveMode)
+                switch (Variables.Orbwalker.GetActiveMode())
                 {
-                    case OrbwalkerMode.Orbwalk:
+                    case OrbwalkingMode.Combo:
                         Combo();
                         break;
-                   case OrbwalkerMode.Hybrid:
+                    case OrbwalkingMode.Hybrid:
                       Harass();
                       break;
-                    case OrbwalkerMode.LaneClear:
+                    case OrbwalkingMode.LaneClear:
                        
-                      LaneClear();
-                      JungleClear();
+                    LaneClear();
+                     // JungleClear();
                         break;
                   
 
@@ -196,16 +196,16 @@ namespace HuyNK_Series_SDK.Plugins
         {
             if (!ObjectManager.Player.IsDead)
             {
-            	if (_Getmenu.get_bool("Drawings","DrawQ") && Q.isReadyPerfectly())
+            	if (_Getmenu.get_bool("Drawings","DrawQ") && Q.IsReady())
                     Drawing.DrawCircle(GameObjects.Player.Position, Q.Range, Color.FromArgb(MenuProvider.MainMenu["Drawings"]["QColor"].GetValue<MenuColor>().Color.ToBgra()));
 
-            	if (_Getmenu.get_bool("Drawings","DrawW") && W.isReadyPerfectly())
+            	if (_Getmenu.get_bool("Drawings","DrawW") && W.IsReady())
                     Drawing.DrawCircle(GameObjects.Player.Position, W.Range, Color.FromArgb(MenuProvider.MainMenu["Drawings"]["WColor"].GetValue<MenuColor>().Color.ToBgra()));
 
-            	if (_Getmenu.get_bool("Drawings","DrawE") && E.isReadyPerfectly())
+            	if (_Getmenu.get_bool("Drawings","DrawE") && E.IsReady())
                     Drawing.DrawCircle(GameObjects.Player.Position, E.Range, Color.FromArgb(MenuProvider.MainMenu["Drawings"]["EColor"].GetValue<MenuColor>().Color.ToBgra()));
 
-            	if (_Getmenu.get_bool("Drawings","DrawR") && R.isReadyPerfectly())
+            	if (_Getmenu.get_bool("Drawings","DrawR") && R.IsReady())
                     Drawing.DrawCircle(GameObjects.Player.Position, R.Range, Color.FromArgb(MenuProvider.MainMenu["Drawings"]["RColor"].GetValue<MenuColor>().Color.ToBgra()));
             }
         }
@@ -213,20 +213,20 @@ namespace HuyNK_Series_SDK.Plugins
         private float GetComboDamage(Obj_AI_Hero Enemy)
         {
             return
-               (Q.isReadyPerfectly() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.Q) : 0)+
-         (W.isReadyPerfectly() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.W) : 0)+
-             (R.isReadyPerfectly() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.R) : 0); ;
+               (Q.IsReady() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.Q) : 0)+
+         (W.IsReady() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.W) : 0)+
+             (R.IsReady() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.R) : 0); ;
         }
 
         private void Combo()
         {
             
              Cast_Q();
-          if (_Getmenu.get_bool("Combo","UseW") && W.isReadyPerfectly())
-           
-             CastBasicSkillShot(W, W.Range, TargetSelector.DamageType.Physical, HitChance.High);
+            if (_Getmenu.get_bool("Combo", "UseW") && W.IsReady())
 
-            if (_Getmenu.get_bool("Combo", "UseE") && E.isReadyPerfectly())
+                W.CastOnBestTarget();
+
+            if (_Getmenu.get_bool("Combo", "UseE") && E.IsReady())
                 E.CastOnBestTarget();
 
 
@@ -236,10 +236,10 @@ namespace HuyNK_Series_SDK.Plugins
         {
         
                 Cast_Q();
-           
+
             if (_Getmenu.get_bool("Harass", "UseW") && W.IsReady())
-            
-                CastBasicSkillShot(W, W.Range, TargetSelector.DamageType.Physical, HitChance.High);
+
+                W.CastOnBestTarget();
             
             if (_Getmenu.get_bool("Harass", "UseE") && E.IsReady())
             
@@ -247,16 +247,30 @@ namespace HuyNK_Series_SDK.Plugins
             
         }
 
-        private void LaneClear()
+        public  void LaneClear()
         {
             var useQ = _Getmenu.get_bool("LaneClear","UseQ");
             
-            if (useQ)
+            if (useQ )
             {
-              
+                var orbT = Variables.Orbwalker.GetTarget();
+                if (orbT.IsValid<Obj_AI_Minion>() && CountMinionsInRange(250, orbT.Position) >= 5)
+                {
+                    Q.Cast();
+                }
             }
         }
 
+        private static int CountMinionsInRange(float range, Vector3 pos)
+        {
+            var minions = MinionManager.GetMinions(pos, range);
+            int count = 0;
+            foreach (var minion in minions)
+            {
+                count++;
+            }
+            return count;
+        }
         private void JungleClear()
         {
             var useQ = _Getmenu.get_bool("LaneClear", "UseQ");
@@ -289,7 +303,7 @@ namespace HuyNK_Series_SDK.Plugins
                 }
             }
          
-            	if (_Getmenu.get_bool("Misc","UseKillsteal") && R.isReadyPerfectly())
+            	if (_Getmenu.get_bool("Misc","UseKillsteal") && R.IsReady())
                 {
                     
                    
@@ -384,18 +398,7 @@ namespace HuyNK_Series_SDK.Plugins
                 
             }
         }
-        public static void CastBasicSkillShot(Spell spell, float range, TargetSelector.DamageType type, HitChance hitChance)
-        {
-            var target = TargetSelector.GetTarget(range, type);
-
-            if (target == null || !spell.IsReady())
-                return;
-            spell.UpdateSourcePosition();
-
-            if (spell.GetPrediction(target).Hitchance >= hitChance)
-                spell.Cast(target);
-        }
-        
+      
 
 
     }

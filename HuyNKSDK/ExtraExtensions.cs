@@ -1,6 +1,7 @@
 ﻿using LeagueSharp;
 using LeagueSharp.SDK.Core.Extensions;
 using LeagueSharp.SDK.Core.Wrappers;
+using LeagueSharp.SDK.Core.Wrappers.Spells;
 using System;
 using System.Linq;
 

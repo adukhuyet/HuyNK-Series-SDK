@@ -4,6 +4,8 @@ using LeagueSharp;
 using LeagueSharp.SDK.Core;
 using LeagueSharp.SDK.Core.Utils;
 using LeagueSharp.SDK.Core.Enumerations;
+using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
+using LeagueSharp.SDK.Core.Wrappers.TargetSelector;
 
 namespace HuyNK_Series_SDK
 {
@@ -18,10 +20,7 @@ namespace HuyNK_Series_SDK
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            var OrbwalkerTarget = Orbwalker.GetTarget(OrbwalkerMode.Orbwalk);
-
-            if (OrbwalkerTarget != null)
-                Drawing.DrawCircle(OrbwalkerTarget.Position, OrbwalkerTarget.BoundingRadius, System.Drawing.Color.Red);
+            
         }
     }
 }

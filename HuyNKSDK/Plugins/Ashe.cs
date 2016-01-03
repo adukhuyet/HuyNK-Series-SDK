@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-
+using System.Windows.Forms;
 using LeagueSharp;
+using LeagueSharp.Common;
 using LeagueSharp.SDK.Core;
-using LeagueSharp.SDK.Core.UI.IMenu;
 using LeagueSharp.SDK.Core.UI.IMenu.Values;
 using LeagueSharp.SDK.Core.Enumerations;
 using LeagueSharp.SDK.Core.Wrappers;
@@ -11,6 +11,10 @@ using LeagueSharp.SDK.Core.Extensions;
 using LeagueSharp.SDK.Core.Utils;
 
 using Color = System.Drawing.Color;
+using HitChance = LeagueSharp.SDK.Core.Enumerations.HitChance;
+using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
+using SkillshotType = LeagueSharp.SDK.Core.Enumerations.SkillshotType;
+using Spell = LeagueSharp.SDK.Core.Wrappers.Spells.Spell;
 
 namespace HuyNK_Series_SDK.Plugins
 {
@@ -89,24 +93,28 @@ namespace HuyNK_Series_SDK.Plugins
 
         private void Game_OnGameUpdate(EventArgs args)
         {
+           
             if (!ObjectManager.Player.IsDead)
             {
-                switch (Orbwalker.ActiveMode)
-                {
-                    case OrbwalkerMode.Orbwalk:
-                        Combo();
-                        break;
-                    case OrbwalkerMode.Hybrid:
-                        Harass();
-                        break;
-                    case OrbwalkerMode.LaneClear:
-                        LaneClear();
-                        JungleClear();
-                        break;
-                }
 
                 Killsteal();
                 AutoRimmobile();
+                switch (Variables.Orbwalker.GetActiveMode())
+                {
+                    case OrbwalkingMode.Combo:
+                        Combo();
+                        break;
+                    case OrbwalkingMode.Hybrid:
+                        Harass();
+                        break;
+                    case OrbwalkingMode.LaneClear:
+                        LaneClear();
+                        break;
+                    case OrbwalkingMode.LastHit:
+                       LaneClear();
+                        break;
+                    
+                }
             }
         }
 
@@ -114,10 +122,10 @@ namespace HuyNK_Series_SDK.Plugins
         {
             if (!ObjectManager.Player.IsDead)
             {
-                if (MenuProvider.MainMenu["Drawings"]["DrawW"].GetValue<MenuBool>().Value && W.isReadyPerfectly())
+                if (MenuProvider.MainMenu["Drawings"]["DrawW"].GetValue<MenuBool>().Value && W.IsReady())
                     Drawing.DrawCircle(GameObjects.Player.Position, W.Range, Color.FromArgb(MenuProvider.MainMenu["Drawings"]["WColor"].GetValue<MenuColor>().Color.ToBgra()));
 
-                if (MenuProvider.MainMenu["Drawings"]["DrawR"].GetValue<MenuBool>().Value && R.isReadyPerfectly())
+                if (MenuProvider.MainMenu["Drawings"]["DrawR"].GetValue<MenuBool>().Value && R.IsReady())
                     Drawing.DrawCircle(GameObjects.Player.Position, R.Range, Color.FromArgb(MenuProvider.MainMenu["Drawings"]["RColor"].GetValue<MenuColor>().Color.ToBgra()));
             }
         }
@@ -125,30 +133,30 @@ namespace HuyNK_Series_SDK.Plugins
         private float GetComboDamage(Obj_AI_Hero Enemy)
         {
             return
-                (W.isReadyPerfectly() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.W) : 0) +
-                (R.isReadyPerfectly() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.R) : 0);
+                (W.IsReady() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.W) : 0) +
+                (R.IsReady() ? (float)LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Enemy, SpellSlot.R) : 0);
         }
 
         private void Combo()
         {
-            if (MenuProvider.MainMenu["Combo"]["UseQ"].GetValue<MenuBool>().Value && Q.isReadyPerfectly())
+            if (MenuProvider.MainMenu["Combo"]["UseQ"].GetValue<MenuBool>().Value && Q.IsReady())
                 if (ObjectManager.Player.HasBuff("asheqcastready"))
                     if (GameObjects.EnemyHeroes.Any(x => x.InAutoAttackRange()))
                         Q.Cast();
 
-            if (MenuProvider.MainMenu["Combo"]["UseW"].GetValue<MenuBool>().Value && W.isReadyPerfectly())
+            if (MenuProvider.MainMenu["Combo"]["UseW"].GetValue<MenuBool>().Value && W.IsReady())
                 W.CastOnBestTarget();
 
-            if (MenuProvider.MainMenu["Combo"]["UseR"].GetValue<MenuBool>().Value && R.isReadyPerfectly())
+            if (MenuProvider.MainMenu["Combo"]["UseR"].GetValue<MenuBool>().Value && R.IsReady())
             {
-                foreach (var Target in GameObjects.EnemyHeroes.Where(x => x.IsValidTarget(R.Range) && R.GetPrediction(x).Hitchance >= HitChance.High))
+                foreach (var Target in GameObjects.EnemyHeroes.Where(x => Unit.IsValidTarget(x, R.Range) && R.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     //R Logics
 
                     if (Target.isKillableAndValidTarget(LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, Target, SpellSlot.R), R.Range) && !Target.InAutoAttackRange())
                         R.Cast(Target);//killable
 
-                    if (Target.IsValidTarget(300f))
+                    if (Unit.IsValidTarget(Target, 300f))
                         R.Cast(Target);//too close
 
                     if (Target.isImmobileUntil() > Target.Distance(ObjectManager.Player.ServerPosition) / R.Speed)
@@ -159,13 +167,13 @@ namespace HuyNK_Series_SDK.Plugins
 
         private void Harass()
         {
-            if (MenuProvider.MainMenu["Harass"]["UseW"].GetValue<MenuBool>().Value && W.isReadyPerfectly())
+            if (MenuProvider.MainMenu["Harass"]["UseW"].GetValue<MenuBool>().Value && W.IsReady())
                 W.CastOnBestTarget();
         }
 
         private void LaneClear()
         {
-            if (_Getmenu.get_bool("LaneClear","UseW") && W.isReadyPerfectly())
+            if (_Getmenu.get_bool("LaneClear","UseW") && W.IsReady())
             {
                 //good than shit
                 var FarmLocation = W.GetLineFarmLocation(GameObjects.EnemyMinions.ToList<Obj_AI_Base>());
@@ -179,13 +187,13 @@ namespace HuyNK_Series_SDK.Plugins
         {
             if (GameObjects.Jungle.Any(x => x.InAutoAttackRange()))
             {
-                if (MenuProvider.MainMenu["JungleClear"]["UseQ"].GetValue<MenuBool>().Value && Q.isReadyPerfectly())
+                if (MenuProvider.MainMenu["JungleClear"]["UseQ"].GetValue<MenuBool>().Value && Q.IsReady())
                     if (ObjectManager.Player.HasBuff("asheqcastready"))
                         Q.Cast();
 
-                if (MenuProvider.MainMenu["JungleClear"]["UseW"].GetValue<MenuBool>().Value && W.isReadyPerfectly())
+                if (MenuProvider.MainMenu["JungleClear"]["UseW"].GetValue<MenuBool>().Value && W.IsReady())
                 {
-                    var WTarget = GameObjects.Jungle.FirstOrDefault(x => W.GetPrediction(x).Hitchance >= HitChance.High && x.IsValidTarget(W.Range));
+                    var WTarget = GameObjects.Jungle.FirstOrDefault(x => W.GetPrediction(x).Hitchance >= HitChance.High && Unit.IsValidTarget(x, W.Range));
 
                     if (WTarget != null)
                         W.Cast(WTarget);
@@ -195,7 +203,7 @@ namespace HuyNK_Series_SDK.Plugins
 
         private void Killsteal()
         {
-            if (MenuProvider.MainMenu["Misc"]["UseKillsteal"].GetValue<MenuBool>().Value && R.isReadyPerfectly())
+            if (MenuProvider.MainMenu["Misc"]["UseKillsteal"].GetValue<MenuBool>().Value && R.IsReady())
             {
                 var RTarget = GameObjects.EnemyHeroes.FirstOrDefault(x => R.GetPrediction(x).Hitchance >= HitChance.High && x.isKillableAndValidTarget(LeagueSharp.Common.Damage.GetSpellDamage(ObjectManager.Player, x, SpellSlot.R), R.Range));
 
@@ -206,9 +214,9 @@ namespace HuyNK_Series_SDK.Plugins
 
         private void AutoRimmobile()
         {
-            if (MenuProvider.MainMenu["Misc"]["AutoRimmobile"].GetValue<MenuBool>().Value && R.isReadyPerfectly())
+            if (MenuProvider.MainMenu["Misc"]["AutoRimmobile"].GetValue<MenuBool>().Value && R.IsReady())
             {
-                var RTarget = GameObjects.EnemyHeroes.FirstOrDefault(x => R.GetPrediction(x).Hitchance >= HitChance.High && x.IsValidTarget(R.Range) && x.isImmobileUntil() > x.Distance(ObjectManager.Player.ServerPosition) / R.Speed);
+                var RTarget = GameObjects.EnemyHeroes.FirstOrDefault(x => R.GetPrediction(x).Hitchance >= HitChance.High && Unit.IsValidTarget(x, R.Range) && x.isImmobileUntil() > x.Distance(ObjectManager.Player.ServerPosition) / R.Speed);
 
                 if (RTarget != null)
                     R.Cast(RTarget);
