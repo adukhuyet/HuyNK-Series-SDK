@@ -1,0 +1,14 @@
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\MasterSharp.exe.config
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\obj\Debug\MasterSharp.csprojResolveAssemblyReference.cache
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\MasterSharp.exe
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\MasterSharp.pdb
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\clipper_library.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\LeagueSharp.Common.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\LeagueSharp.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\LeagueSharp.SDK.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\SharpDX.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\LeagueSharp.Sandbox.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\bin\Release\Newtonsoft.Json.dll
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\obj\Debug\MasterSharp.exe
+C:\Users\DELL\Documents\GitHub\HuyNKSDK\MasterSharp\obj\Debug\MasterSharp.pdb
