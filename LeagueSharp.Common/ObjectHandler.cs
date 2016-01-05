@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -100,7 +100,7 @@ namespace LeagueSharp.Common
             {
                 if (type.IsAssignableFrom(key))
                 {
-                    found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid<T>()).ConvertAll(o => (T)o));
+                    found.AddRange(gameObjects[key].Values.Where(o => o.IsValid<T>()).ToList().ConvertAll(o => (T)o));
                 }
             }
 

@@ -52,7 +52,8 @@ namespace LeagueSharp.Common
             Closest,
             NearMouse,
             LessAttack,
-            LessCast
+            LessCast,
+            MostStack
         }
 
         #endregion
@@ -73,12 +74,10 @@ namespace LeagueSharp.Common
                 UsingCustom = value;
                 if (value)
                 {
-                    Game.OnWndProc -= GameOnOnWndProc;
                     Drawing.OnDraw -= DrawingOnOnDraw;
                 }
                 else
                 {
-                    Game.OnWndProc += GameOnOnWndProc;
                     Drawing.OnDraw += DrawingOnOnDraw;
                 }
             }
@@ -105,6 +104,7 @@ namespace LeagueSharp.Common
 
             _configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
             _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());
+            _configMenu.Item("stack.count").Show(_configMenu.Item("TargetingMode").GetValue<StringList>().SelectedIndex == 8);
         }
 
         private static void GameOnOnWndProc(WndEventArgs args)
@@ -270,13 +270,20 @@ namespace LeagueSharp.Common
                 }
                 config.AddItem(autoPriorityItem);
                 config.AddItem(
+                    new MenuItem("stack.count", "Stack Count").SetValue(new Slider(2, 1, 20)))
+                    .SetTooltip("Only for Stack Mode");
+                config.AddItem(
                     new MenuItem("TargetingMode", "Target Mode").SetShared()
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
 
-                CommonMenu.Config.AddSubMenu(config);
 
+                CommonMenu.Instance.AddSubMenu(config);
                 Game.OnWndProc += GameOnOnWndProc;
-                Drawing.OnDraw += DrawingOnOnDraw;
+
+                if (!CustomTS)
+                {
+                    Drawing.OnDraw += DrawingOnOnDraw;
+                }
             };
         }
 
@@ -316,13 +323,6 @@ namespace LeagueSharp.Common
             // Kayle's Intervention (R)
             if (target.HasBuff("JudicatorIntervention"))
             {
-                return true;
-            }
-
-            // Poppy's Diplomatic Immunity (R)
-            if (target.HasBuff("DiplomaticImmunity") && !ObjectManager.Player.HasBuff("poppyulttargetmark"))
-            {
-                //TODO: Get the actual target mark buff name
                 return true;
             }
 
@@ -412,6 +412,18 @@ namespace LeagueSharp.Common
                    !IsInvulnerable(target, damageType, ignoreShieldSpells);
         }
 
+        private static string[] StackNames =
+            {
+                "kalistaexpungemarker",
+                "vaynesilvereddebuff",
+                "twitchdeadlyvenom",
+                "ekkostacks",
+                "dariushemo",
+                "gnarwproc",
+                "tahmkenchpdebuffcounter",
+                "varuswdebuff",
+            };
+
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion,
             float range,
             DamageType type,
@@ -470,7 +482,7 @@ namespace LeagueSharp.Common
 
                     case TargetingMode.MostAP:
                         return targets.MaxOrDefault(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod);
-
+						
                     case TargetingMode.Closest:
                         return
                             targets.MinOrDefault(
@@ -500,6 +512,12 @@ namespace LeagueSharp.Common
                                 hero =>
                                     champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) *
                                     GetPriority(hero));
+                    
+                    case TargetingMode.MostStack:
+                        return targets.MaxOrDefault(hero =>
+                            hero.Buffs.Where(x => StackNames.Contains(x.Name.ToLower()) &&
+                                x.Count >= _configMenu.Item("stack.count").GetValue<Slider>().Value)
+                                .Sum(buff => buff.Count));
                 }
             }
             catch (Exception e)

@@ -73,7 +73,7 @@ namespace LeagueSharp.Common
             if (addTargetSelector)
             {
                 // Target selector
-                _targetSelectorMenu = new Menu("Chọn đối tượng", "ts");
+                _targetSelectorMenu = new Menu("Target Selector", "ts");
                 TargetSelector.AddToMenu(_targetSelectorMenu);
                 _menu.AddSubMenu(_targetSelectorMenu);
             }
@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
             if (addOrbwalker)
             {
                 // Orbwalker
-                _orbwalkerMenu = new Menu("Thả diều", "orbwalker");
+                _orbwalkerMenu = new Menu("Orbwalker", "orbwalker");
                 _orbwalker = new Orbwalking.Orbwalker(_orbwalkerMenu);
                 _menu.AddSubMenu(_orbwalkerMenu);
             }

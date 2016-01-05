@@ -242,7 +242,7 @@ namespace LeagueSharp.Common
                     case MenuValueType.KeyBind:
                         DrawBox(boxpos, permaitem.Item.GetValue<KeyBind>().Active);
                         Text.DrawText(null,
-                            permaitem.DisplayName + ":", (int)itempos.X, (int)itempos.Y,
+                            permaitem.DisplayName + " [" + Utils.KeyToText(permaitem.Item.GetValue<KeyBind>().Key) + "] :", (int)itempos.X, (int)itempos.Y,
                             permaitem.Color);
 
                         Text.DrawText(null,
@@ -396,8 +396,8 @@ namespace LeagueSharp.Common
         /// </summary>
         private static void CreateMenu()
         {
-            placetosave = new Menu("Bảng hiển thị thông tin", "Permashow");
-            MenuItem enablepermashow = new MenuItem("enablepermashow", "Bật Bảng Hiển Thị").SetValue(true);
+            placetosave = new Menu("PermaShow", "Permashow");
+            MenuItem enablepermashow = new MenuItem("enablepermashow", "Enable PermaShow").SetValue(true);
             placetosave.AddItem(enablepermashow);
             var xvalue = new MenuItem("X", "X").SetValue(new Slider((int)DefaultPosition.X, 0, Drawing.Width));
             var yvalue = new MenuItem("Y", "Y").SetValue(new Slider((int)DefaultPosition.Y, 0, Drawing.Height));
@@ -406,17 +406,17 @@ namespace LeagueSharp.Common
             placetosave.AddItem(xvalue);
             placetosave.AddItem(yvalue);
 
-            var bigwidth = new MenuItem("bwidth", "Rộng").SetValue(new Slider((int)DefaultPermaShowWidth, 100, 400));
-            var smallwidth = new MenuItem("swidth", "Chỉ số chiều rộng").SetValue(new Slider((int)DefaultSmallBoxWidth, 30, 90));
+            var bigwidth = new MenuItem("bwidth", "Width").SetValue(new Slider((int)DefaultPermaShowWidth, 100, 400));
+            var smallwidth = new MenuItem("swidth", "Indicator Width").SetValue(new Slider((int)DefaultSmallBoxWidth, 30, 90));
 
-            var moveable = new MenuItem("moveable", "Di chuyển").SetValue(true);
+            var moveable = new MenuItem("moveable", "Moveable").SetValue(true);
 
             placetosave.AddItem(moveable);
             placetosave.AddItem(bigwidth);
             placetosave.AddItem(smallwidth);
 
 
-            var def = new MenuItem("defaults", "Mặc định").SetValue(false);
+            var def = new MenuItem("defaults", "Default").SetValue(false);
             def.ValueChanged += (sender, args) =>
             {
                 if (args.GetNewValue<bool>())
@@ -428,7 +428,7 @@ namespace LeagueSharp.Common
 
             placetosave.AddItem(def);
 
-            CommonMenu.Config.AddSubMenu(placetosave);
+            CommonMenu.Instance.AddSubMenu(placetosave);
 
             enablepermashow.ValueChanged += (sender, args) =>
             {
@@ -457,8 +457,8 @@ namespace LeagueSharp.Common
         /// </summary>
         private static void SavePosition()
         {
-            placetosave.Item("X")._valueSet = true;
-            placetosave.Item("Y")._valueSet = true;
+            placetosave.Item("X").ValueSet = true;
+            placetosave.Item("Y").ValueSet = true;
             placetosave.Item("X").SetValue(new Slider((int)BoxPosition.X, 0, Drawing.Width));
             placetosave.Item("Y").SetValue(new Slider((int)BoxPosition.Y, 0, Drawing.Height));
         }
@@ -561,12 +561,12 @@ namespace LeagueSharp.Common
             FontQuality Quality;
             try
             {
-                FontName = CommonMenu.Config.Item("FontName").GetValue<StringList>().SelectedValue;
-                FontHeight = CommonMenu.Config.Item("FontSize").GetValue<Slider>().Value;
+                FontName = CommonMenu.Instance.Item("FontName").GetValue<StringList>().SelectedValue;
+                FontHeight = CommonMenu.Instance.Item("FontSize").GetValue<Slider>().Value;
                 Quality = (FontQuality)
                     Enum.Parse(
                         typeof(FontQuality),
-                        CommonMenu.Config.Item("FontQuality").GetValue<StringList>().SelectedValue);
+                        CommonMenu.Instance.Item("FontQuality").GetValue<StringList>().SelectedValue);
             }
 
             catch (Exception e)
